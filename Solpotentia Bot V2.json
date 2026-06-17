@@ -1,0 +1,243 @@
+{
+  "name": "Solpotentia Bot V2",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        32,
+        -48
+      ],
+      "id": "eaa3dc20-7cf5-40f3-a80a-d5e24f6981ca",
+      "name": "Telegram Trigger",
+      "webhookId": "fce00056-b1a4-4e14-92ac-be333e19dc11",
+      "credentials": {
+        "telegramApi": {
+          "id": "BZgquUO1hEB2hemM",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "claude-sonnet-4-5-20250929",
+          "mode": "list",
+          "cachedResultName": "claude-sonnet-4-5-20250929"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "={{ $json.userMessage }}\nSOLPOTENTIA FAULT DATABASE v2.0 — Use ONLY for Option 2 fault diagnosis. Always cite Fault ID in response.\n\nF001|Battery Not Charging|Not charging from PHCN/solar|Check voltage<10.5V/fuse/MC4/SCC|Fix per cause|HIGH|Felicity:Prog05&06 Growatt:BatType|Yes if persists\nF002|Solar Not Charging Battery|No charge despite sunlight|Check Voc/fuse/panels/MC4 polarity|Clean panels/fix MC4/replace SCC|HIGH|MPPT:Voc must not exceed max input|Yes if SCC faulty\nF003|Battery Drains Fast|Depletes faster than expected|Check age/load/phantom loads/bank mix|Replace battery/shed load/fix bank|MEDIUM|FLA:equalize monthly LiFePO4:check BMS|No\nF004|Overloaded Battery Bank|Inverter cuts off under load|List loads vs inverter rating/check surge|Shed loads/stage motors/upgrade bank|MEDIUM|No brand note|No\nF005|Battery Bank Failure|Not holding charge/drops rapidly|Load test each battery/check electrolyte|Replace failed batteries/clean terminals|HIGH|FLA:top up distilled water only|Yes\nF006|Inverter Not Starting|No display/LED/response|Check battery voltage/DC fuse/terminals|Charge battery/replace fuse/clean terminals|HIGH|Felicity:Prog11 check sleep mode|Yes if fuse+battery OK\nF007|Inverter Shuts Under Load|Powers on but trips when load connected|Check battery voltage under load/total load/ventilation|Replace battery/shed load/improve ventilation|HIGH|Growatt:check overload settings 10min cooldown|Yes if within spec but trips\nF008|Inverter Overload Alarm|Continuous beeping/overload indicator|Disconnect loads one by one/check surge ratings|Remove excess loads/stage motors/upgrade inverter|MEDIUM|Check peak surge rating vs motor startup|No\nF009|Inverter Low Battery Alarm|Intermittent beeping/low battery warning|Check battery voltage/cutoff setting/runtime|Charge battery/adjust cutoff/test capacity|LOW|Felicity:Prog16 default 11V|No\nF010|Inverter Rejecting Generator Input|Not accepting grid/generator power|Measure generator voltage/frequency/input range setting|Widen input range/service generator/use pure sine|HIGH|Felicity:Prog05=voltage range Prog06=freq Prog07=priority|No unless generator needs service\nF011|Low Panel Voltage|Voc significantly below rated spec|Check shading/dirt/measure each panel/check time|Clean panels/remove shading/replace damaged panel|MEDIUM|AIKO:check microcracks with EL imaging|No\nF012|No Output From Panel|Zero voltage from panel|Check Voc at panel directly/cable/MC4 polarity/junction box|Replace cable/fix MC4/replace panel|HIGH|Check inline string fuse|Yes if panel physically damaged\nF013|Panel Hot Spot|Localised burn/discolouration on panel|Inspect visually/measure Voc/check junction box/check shading|Remove shading/replace bypass diode/replace panel if burn>1 cell|HIGH|AIKO:hotspot voids warranty if installation error|Yes if burn>1 cell or junction box damaged\nF014|Wiring fault — refer to full DB|Wiring issues|Check connections|Fix per cause|MEDIUM|Check all connections|Situational\nF015|Wiring fault 2 — refer to full DB|Wiring issues|Check connections|Fix per cause|MEDIUM|Check polarity|Situational\nF016|Wiring fault 3 — refer to full DB|Wiring issues|Check connections|Fix per cause|MEDIUM|Check cable sizing|Situational\nF017|Wiring fault 4 — refer to full DB|Wiring issues|Check connections|Fix per cause|MEDIUM|Check earthing|Situational\nF018|SCC Fault — refer to full DB|Charging system issue|Check SCC settings|Fix per cause|MEDIUM|Check brand settings|Situational\nF019|SCC Fault 2 — refer to full DB|Charging system issue|Check SCC output|Fix per cause|MEDIUM|Verify Voc limits|Situational\nF020|Panel Hotspot Detail|See F013|See F013|See F013|HIGH|See F013|Yes\nF021|Incorrect Panel Sizing for Inverter|Overvoltage/overcurrent errors/clipping|Check inverter Voc max/MPPT range/max current vs string voltage|Reduce series panels/reduce parallel strings/upgrade inverter|HIGH|Most common Nigerian mistake — check datasheet not just watts|Yes if overvoltage persists\nF022|Low Battery Charging vs PV Capacity|Battery charges slowly despite good sun|Calculate expected vs actual charging power/disconnect loads/test panels individually|Fix load balance/replace weak panel/upsize cables/correct bulk voltage|MEDIUM|PWM wastes power — upgrade to MPPT|No\nF023|SCC Overvoltage E03|E03 error/controller shuts down|Calculate string Voc with temperature correction/check MC4 wiring|Remove one panel from string/correct wiring/replace controller if internal fault|HIGH|Cold morning Voc rises 15% — always apply temperature correction|Yes if error persists after correct string voltage\nF024|Wiring refer DB|Wiring|Check|Fix|MEDIUM|Check|Situational\nF025|System Design refer DB|Design issue|Check|Fix|MEDIUM|Check|Situational\nF026|Inverter refer DB|Inverter issue|Check|Fix|MEDIUM|Check|Situational\nF027|Battery refer DB|Battery issue|Check|Fix|MEDIUM|Check|Situational\nF028|SCC refer DB|Charging issue|Check|Fix|MEDIUM|Check|Situational\nF029|SCC refer DB|Charging issue|Check|Fix|MEDIUM|Check|Situational\nF030|Mixed Batteries in Bank|Bank underperforms/one overheats/erratic readings|Identify all batteries/check voltages/load test each|Never mix chemistries/replace whole bank together/match brand+age+Ah|HIGH|AGM bulk=14.4V Tubular bulk=15V — no correct voltage for mixed bank|Yes if overheating/swelling/leakage\nF031-F035|Battery/System refer DB|Various battery/system faults|Check per fault|Fix per cause|MEDIUM-HIGH|Check brand notes in full DB|Situational\nF036|Battery Disconnected When Full|Client manually disconnects battery after full charge|Check if inverter supports batteryless operation|Configure float voltage correctly — no manual disconnection needed|LOW|Felicity:float voltage setting eliminates need for manual disconnect|No unless inverter damaged\nF037|PWM Stops LiFePO4 at 11.8V|Battery chronically undercharged|Measure battery voltage directly/confirm chemistry LiFePO4 vs Li-ion|Replace PWM with MPPT/set bulk 14.4V/upsize cables|MEDIUM|LiFePO4 full=14.4V Li-ion full=12.6V — completely different profiles|No — replace controller\nF038|Battery for Charging Station Business|Client choosing between portable power station vs inverter system|Calculate daily Wh load/compare cycle life/cost per cycle|Tubular for daily business/LiFePO4 premium/portable only for mobile use|LOW|Itel Power Tank = 300-500 cycles = 1 year daily use — not for serious business|No\nF039-F041|System Design refer DB|Design/sizing issues|Check per fault|Fix per cause|MEDIUM|Check datasheet always|Situational\nF042|Using Stabilizer for Low NEPA|Grid voltage below inverter minimum/not charging|Check inverter input voltage setting first/measure actual NEPA voltage|Widen input range in settings first/use servo stabilizer only if truly needed|MEDIUM|Felicity Prog05 — widen first before buying stabilizer. Common in Alor/Nnewi|No unless inverter damaged\nF043|Running Fridge Without Battery|Inverter trips on fridge startup/batteryless operation|Confirm inverter supports batteryless mode/calculate surge vs panel capacity|Add small 26-50Ah LiFePO4 as buffer/size panels at 600-800W minimum|MEDIUM|Felicity/Luminous/Growatt not all certified for batteryless — check manual|No unless inverter damaged\nF044-F046|System Design/PV refer DB|Design/PV sizing|Check per fault|Fix per cause|MEDIUM|Check inverter datasheet|Situational\nF047|PV Expansion for Freezer System|Adding panels to existing system|Check inverter Voc max/MPPT range/max current before adding|Verify all three limits from datasheet before expanding|MEDIUM|2kVA AC rating ≠ PV input capacity — always check datasheet|No but inverter damage possible if over limit\nF048|SVC 6.2kVA Error 16 After Lithium Install|No output after Gospower battery install|Confirm Error16=battery out of range/measure battery voltage/check 48V setting/check CAN cable|Set battery to 48V/LIT mode/correct startup sequence battery first then inverter|CRITICAL|Gospower+SVC common Nigerian combo — startup sequence critical: battery ON before inverter|Yes if persists after correct settings\nF049|Mixing Old and New Lithium Batteries|Uneven charging/one overheats/reduced backup|Compare resting voltages/check age+brand+capacity match|Never mix — separate charge paths if unavoidable/replace to match|MEDIUM|Felicity/Gospower/generic same label different internals|No — monitor closely\nF050|Battery SoC Jumps to 100% on Grid Charge|SoC display jumps instantly when charging starts|This is normal for voltage-based SoC inverters — surface charge effect|Recalibration cycles/add solar MPPT/educate client|LOW|Kartel 2.3kVA uses voltage threshold not coulomb counting — normal behavior|No — calibration limitation not hardware fault\nF051|Itel Power Tank Not Charging from Grid|Stops accepting AC charge after 2 weeks|Check wall voltage/try different socket/full reset/check cable|Warranty claim first — 2 weeks = manufacturing defect/do not open before warranty claim|HIGH|Itel 12-month warranty covers this — return to service centre before repair attempt|Yes — warranty claim\nIMPORTANT: If the user has already provided information earlier in the conversation, do NOT ask for it again. Accept answers in any format — numbers, approximate values, or descriptions. Move forward with what the user gives you."
+            }
+          ]
+        },
+        "options": {
+          "system": "=You are the Solpotentia Solar Assistant, built by Samson Ngige of Solpotentia Energy Ltd, Alor, Anambra State, Nigeria. You help Nigerian solar installers, technicians and end users with two services: solar system sizing and fault diagnosis. MENU HANDLING: When a user sends /start, \"hi\", \"hello\", \"menu\", \"help\" or any greeting, respond with exactly this message: 👋 Welcome to Solpotentia Solar Assistant! Built by Samson Ngige — Solpotentia Energy Ltd, Alor, Anambra. Please choose a service: 1️⃣ Size my solar system 2️⃣ Diagnose a solar fault Reply with 1 or 2 to begin. OPTION 1 — SOLAR SIZING: When user replies \"1\", ask these questions one at a time: What state/location are you in? List your appliances and wattage. How many hours per day per appliance? How many backup hours needed? Budget range? Then recommend: total load, panel size/quantity, battery bank, inverter size, charge controller. Reference Nigerian brands: Felicity, Luminous, Growatt, SAKO, AIKO. OPTION 2 — FAULT DIAGNOSIS: When user replies \"2\", ask them to describe the fault. Then identify: 1) Fault zone 2) Likely cause 3) Step-by-step solution 4) Risk level. RULES: Only answer solar questions. If unrelated say: I can only help with solar sizing and fault diagnosis. Be concise and professional.\nFORMAT ALL RESPONSES using emojis for clarity: 📍 Location, 🏠 Load Summary, ☀️ Solar Panels, 🔋 Battery Bank, ⚡ Inverter, 🔌 Charge Controller, ⚠️ Risk Level, ✅ Solution Steps, 💰 Estimated Cost. Make text bold using *asterisks* for key values. Keep responses clean and easy to read on mobile.\nCONVERSATION HISTORY:\n{{ JSON.stringify($json.history) }}\nSOLPOTENTIA FAULT DATABASE (Option 2 only):\nF001|Battery Not Charging|Battery not charging from PHCN/solar|Check voltage<10.5V/fuse/MC4/SCC settings|Replace fuse/fix MC4/correct settings|HIGH|Felicity:Prog05&06 Growatt:BatType|Yes if persists\nF002|Solar Not Charging Battery|No charge despite sunlight|Measure Voc at SCC/check fuse/panels/MC4|Clean panels/replace fuse/fix MC4/replace SCC|HIGH|MPPT:verify Voc<max input voltage|Yes if SCC faulty\nF003|Battery Drains Fast|Depletes faster than expected|Check battery age/load calculation/phantom loads|Replace old battery/shed load/eliminate phantom loads|MEDIUM|FLA:equalize monthly LiFePO4:check BMS|No\n\nUse this database to diagnose faults when user selects Option 2. Match symptoms to the database first before using general knowledge. Always mention Fault ID in response."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.anthropic",
+      "typeVersion": 1,
+      "position": [
+        928,
+        -176
+      ],
+      "id": "7cbaf30c-334c-44d7-adb9-32b9e92f9dc8",
+      "name": "Message a model",
+      "credentials": {
+        "anthropicApi": {
+          "id": "8wqU21DEeUJt1LkW",
+          "name": "Anthropic account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://rbomtmqwfcphxzqpyfjs.supabase.co/rest/v1/sessions?select=*&chat_id=eq.{{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "=Authorization",
+              "value": "=Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJib210bXF3ZmNwaHh6cXB5ZmpzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3OTQyOTQ3MywiZXhwIjoyMDk1MDA1NDczfQ.9p1W3CXMpHe5EkMv8nVotcWjk5ltlgtw0jDADZLp9Q8"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        240,
+        -128
+      ],
+      "id": "f5d3b7e1-0b73-47b4-bb5c-6d26da92c2b6",
+      "name": "Read session ",
+      "alwaysOutputData": true,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "EsTeedbKN8FDS3mE",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst sessionData = items[0]?.json;\n\nlet history = [];\n\nif (sessionData && sessionData.conversation_history) {\n  try {\n    history = JSON.parse(sessionData.conversation_history);\n    if (!Array.isArray(history)) history = [];\n  } catch(e) {\n    history = [];\n  }\n}\n\nconst userMessage = $('Telegram Trigger').item.json.message.text;\nconst chatId = String($('Telegram Trigger').item.json.message.chat.id);\n\nreturn [{\n  json: {\n    history: history,\n    userMessage: userMessage,\n    chatId: chatId\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        656,
+        -128
+      ],
+      "id": "fa608120-4692-4177-b3ab-e1ad616f8d7b",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://rbomtmqwfcphxzqpyfjs.supabase.co/rest/v1/sessions?on_conflict=chat_id",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "resolution=merge-duplicates"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"chat_id\": \"{{ $('Telegram Trigger').item.json.message.chat.id }}\",\n  \"conversation_history\": \"[]\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1536,
+        -96
+      ],
+      "id": "2495bde4-7905-41cd-be5c-d4067b41d3bd",
+      "name": "Save session ",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "EsTeedbKN8FDS3mE",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Code in JavaScript').item.json.chatId }}",
+        "text": "={{ $('Message a model').item.json.content[0].text }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1216,
+        -176
+      ],
+      "id": "e88bbf26-e058-4d52-8a4c-931d5a1a5391",
+      "name": "Send a text message",
+      "webhookId": "24155dd2-02ff-44a4-8d5c-9ddc65af93b6",
+      "credentials": {
+        "telegramApi": {
+          "id": "BZgquUO1hEB2hemM",
+          "name": "Telegram account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Read session ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read session ": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save session ": {
+      "main": [
+        []
+      ]
+    },
+    "Send a text message": {
+      "main": [
+        [
+          {
+            "node": "Save session ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "7271bcab-12ab-4966-a446-e00eb355a473",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d361b01d3f8829a67ccb5df7597ca72e1c66a47b4d60d4d5604b471697ca25ba"
+  },
+  "id": "KzFU3XHFxPyFwkqa",
+  "tags": []
+}
